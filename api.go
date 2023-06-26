@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 type GetTokenOptions struct {
@@ -43,7 +44,7 @@ func GetToken(options *GetTokenOptions) (GetTokenResult, error) {
 		options.Headers = make(map[string]string)
 	}
 	if _, ok := options.Headers["User-Agent"]; !ok {
-		options.Headers["User-Agent"] = "DEFAULT_USER_AGENT"
+		options.Headers["User-Agent"] = DEFAULT_USER_AGENT
 	}
 
 	options.Headers["Accept-Language"] = "en-US,en;q=0.9"
@@ -58,7 +59,6 @@ func GetToken(options *GetTokenOptions) (GetTokenResult, error) {
 	}
 
 	ua := options.Headers["User-Agent"]
-
 	formData := url.Values{
 		"bda":         {GetBda(ua, options.Headers["Referer"], options.Location)},
 		"public_key":  {options.PKey},
@@ -67,11 +67,18 @@ func GetToken(options *GetTokenOptions) (GetTokenResult, error) {
 		"rnd":         {strconv.FormatFloat(rand.Float64(), 'f', -1, 64)},
 	}
 
+	if options.Site == "" {
+		formData.Del("site")
+	}
+
 	for key, value := range options.Data {
 		formData.Add("data["+key+"]", value)
 	}
 
-	req, err := http.NewRequest("POST", options.SURL+"/fc/gt2/public_key/"+options.PKey, bytes.NewBufferString(formData.Encode()))
+	form := strings.ReplaceAll(formData.Encode(), "+", "%20")
+	form = strings.ReplaceAll(form, "%28", "(")
+	form = strings.ReplaceAll(form, "%29", ")")
+	req, err := http.NewRequest("POST", options.SURL+"/fc/gt2/public_key/"+options.PKey, bytes.NewBufferString(form))
 	if err != nil {
 		return GetTokenResult{}, err
 	}

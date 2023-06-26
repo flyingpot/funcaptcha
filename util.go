@@ -34,12 +34,11 @@ func Random() string {
 func GetBda(userAgent string, referer string, location string) string {
 	fp := getFingerprint()
 	fe := prepareFe(fp)
-	now := time.Now().Unix()
 	bda := []Bda{
 		{Key: "api_type", Value: "js"},
 		{Key: "p", Value: 1},
 		{Key: "f", Value: GetMurmur128String(prepareF(fp), 31)},
-		{Key: "n", Value: base64.StdEncoding.EncodeToString([]byte(strconv.Itoa(int(math.Round(float64(now) / 1000)))))},
+		{Key: "n", Value: base64.StdEncoding.EncodeToString([]byte(strconv.Itoa(int(math.Round(float64(time.Now().Unix()))))))},
 		{Key: "wh", Value: Random() + "|" + Random()},
 		{Key: "enhanced_fp", Value: []Bda{
 			{
