@@ -8,11 +8,13 @@ import (
 	"fmt"
 	"io"
 	"math/rand"
-	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
 	"time"
+
+	http "github.com/bogdanfinn/fhttp"
+	tls_client "github.com/bogdanfinn/tls-client"
 )
 
 type GetTokenOptions struct {
@@ -111,7 +113,17 @@ func GetToken(options *GetTokenOptions) (GetTokenResult, error) {
 	return result, nil
 }
 
-var client *http.Client = http.DefaultClient
+var (
+	jar     = tls_client.NewCookieJar()
+	options = []tls_client.HttpClientOption{
+		tls_client.WithTimeoutSeconds(360),
+		tls_client.WithClientProfile(tls_client.Safari_IOS_16_0),
+		tls_client.WithNotFollowRedirects(),
+		tls_client.WithCookieJar(jar), // create cookieJar instance and pass it as argument
+	}
+	client, _  = tls_client.NewHttpClient(tls_client.NewNoopLogger(), options...)
+	user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
+)
 
 func GetOpenAIToken() (string, error) {
 	// generate timestamp in 1687790752 format
