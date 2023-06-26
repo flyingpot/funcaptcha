@@ -5,7 +5,7 @@ import (
 )
 
 func TestGetMurmur128String(t *testing.T) {
-	if "ff55565a476832ed3409c64597508ca4" != GetMurmur128String("test", 31) {
+	if GetMurmur128String("test", 31) != "ff55565a476832ed3409c64597508ca4" {
 		t.Fatal("murmur error!")
 	}
 }
