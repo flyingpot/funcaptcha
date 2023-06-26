@@ -19,7 +19,7 @@ type EncryptionData struct {
 	S  string `json:"s"`
 }
 
-func encrypt(data string, key string) string {
+func Encrypt(data string, key string) string {
 	encData, _ := AesEncrypt(data, key)
 
 	encDataJson, err := json.Marshal(encData)
@@ -65,6 +65,10 @@ func AesEncrypt(content string, password string) (*EncryptionData, error) {
 		return nil, err
 	}
 	key, iv, err := DefaultEvpKDF([]byte(password), salt)
+
+	if err != nil {
+		return nil, err
+	}
 
 	block, err := aes.NewCipher(key)
 	if err != nil {

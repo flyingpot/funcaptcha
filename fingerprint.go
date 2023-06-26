@@ -340,7 +340,6 @@ func getFingerprint() Fingerprint {
 	}
 	f["T"] = []interface{}{rand.Intn(8), rand.Float64() > 0.5, rand.Float64() > 0.5}
 	f["H"] = math.Pow(2, float64(rand.Intn(6)))
-	f["SWF"] = f["SWF"]
 
 	return f
 }

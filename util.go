@@ -13,11 +13,6 @@ import (
 const chars = "0123456789abcdef"
 const DEFAULT_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
 
-type TimestampData struct {
-	cookie string
-	value  string
-}
-
 type Bda struct {
 	Key   string      `json:"key"`
 	Value interface{} `json:"value"`
@@ -281,6 +276,6 @@ func GetBda(userAgent string, referer string, location string) string {
 	strB = strings.ReplaceAll(strB, `,"value":"__no_value_place_holder__"`, "")
 	currentTime := time.Now().Unix()
 	key := userAgent + strconv.FormatInt(currentTime-(currentTime%21600), 10)
-	ciphertext := encrypt(strB, key)
+	ciphertext := Encrypt(strB, key)
 	return base64.StdEncoding.EncodeToString([]byte(ciphertext))
 }
