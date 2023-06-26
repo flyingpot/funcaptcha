@@ -1,3 +1,3 @@
-module github.com/flyingpot/funcaptcha
+module github.com/acheong08/funcaptcha
 
 go 1.20
