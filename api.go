@@ -177,6 +177,5 @@ func GetOpenAIToken() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	println(arkose.Token)
 	return arkose.Token, nil
 }
