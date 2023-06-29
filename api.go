@@ -127,8 +127,8 @@ type OpenAiRequest struct {
 	Client  *tls_client.HttpClient
 }
 
-func (this *OpenAiRequest) GetToken() (string, error) {
-	resp, err := (*this.Client).Do(this.Request)
+func (r *OpenAiRequest) GetToken() (string, error) {
+	resp, err := (*r.Client).Do(r.Request)
 	if err != nil {
 		return "", err
 	}
@@ -158,7 +158,7 @@ func NewOpenAiRequestV1() (*OpenAiRequest, error) {
 
 	formData := url.Values{
 		"bda": {GetBda(DEFAULT_USER_AGENT,
-			fmt.Sprintf("%s/v2/%s/1.4.3/enforcement.%s.html",
+			fmt.Sprintf("%s/v2/%s/1.5.2/enforcement.%s.html",
 				surl, pkey, Random()), "")},
 		"public_key":   {"35536E1E-65B4-4D96-9D97-6ADB7EFF8147"},
 		"site":         {"https://chat.openai.com"},
